@@ -1,7 +1,7 @@
 package:
   name: mpdecimal
   version: 2.5.1
-  epoch: 1
+  epoch: 2
   description: "complete implementation of the general decimal arithmetic specification"
   target-architecture:
     - all
@@ -47,3 +47,11 @@ subpackages:
     dependencies:
       runtime:
         - mpdecimal
+  
+  - name: "mpdecimal-doc"
+    description: "mpdecimal documentation"
+    pipeline:
+      - uses: split/manpages
+      - runs: |
+          mkdir -p "${{targets.subpkgdir}}"/usr/share
+          mv "${{targets.destdir}}"/usr/share/doc "${{targets.subpkgdir}}"/usr/share/
