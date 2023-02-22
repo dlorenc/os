@@ -1,0 +1,37 @@
+package:
+  name: spring-boot
+  version: "3.0.2"
+  epoch: 0
+  description:
+  target-architecture:
+    - all
+  copyright:
+    - paths:
+        - "*"
+      attestation:
+      license: Apache-2.0
+environment:
+  contents:
+    packages:
+      - busybox
+      - ca-certificates-bundle
+      - build-base
+      - bash
+      - tini
+      - openjdk-17
+      - maven
+      - git
+      - patch
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/spring-projects/spring-boot
+      branch: v${{package.version}}
+  - runs: |
+      export JAVA_HOME=/usr/lib/jvm/openjdk
+      export LANG=en_US.UTF-8
+
+      ./gradlew publishToMavenLocal
+
+      mkdir -p ${{targets.destdir}}/usr/share/java/${{package.name}}
+      mv /root/.m2/repository/org/springframework/boot/* ${{targets.destdir}}/usr/share/java/${{package.name}}

@@ -417,6 +417,7 @@ $(eval $(call build-package,step,0.23.1-r0))
 $(eval $(call build-package,netcat-openbsd,1.219-r0))
 $(eval $(call build-package,gnutar,1.34-r0))
 $(eval $(call build-package,dpkg,1.20.12-r0))
+$(eval $(call spring-boot,3.0.2-r0))
 
 .build-packages: ${PACKAGES}
 
