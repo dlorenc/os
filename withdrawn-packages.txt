@@ -100,3 +100,5 @@ logstash-8.7.1-r0.apk
 logstash-8.7.0-r1.apk
 secrets-store-csi-driver-provider-azure-1.4.1-r0.apk
 secrets-store-csi-driver-provider-azure-1.4.1-r1.apk
+erlang-25.3.2-r0.apk
+erlang-dev-25.3.2-r0.apk

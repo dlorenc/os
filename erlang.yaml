@@ -1,7 +1,7 @@
 package:
   name: erlang
   version: 25.3.2
-  epoch: 0
+  epoch: 1
   description: General-purpose programming language and runtime environment
   copyright:
     - license: Apache-2.0
@@ -28,6 +28,12 @@ pipeline:
   - runs: |
       export CPPFLAGS="-D_BSD_SOURCE $CPPFLAGS"
 
+      # There's an internal compiler error triggered on arm that breaks jit compilation.
+      jit="--enable-jit"
+      if "${{build.arch}}" == "aarch64"; then
+        jit="--disable-jit"
+      fi
+
       ./otp_build autoconf
       ./configure \
         --prefix=/usr \
@@ -39,7 +45,7 @@ pipeline:
         --enable-threads \
         --enable-shared-zlib \
         --enable-ssl=dynamic-ssl-lib \
-        --enable-jit
+        $jit
 
   - uses: autoconf/make
 
