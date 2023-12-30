@@ -22,6 +22,13 @@ environment:
       - python-3.11
       - python-3.11-dev
       - samurai
+      - clang-17
+      - clang-17-dev
+      - llvm17
+      - llvm17-dev
+      - llvm-lld-17
+      - openmp-17-dev
+      - posix-libc-utils
 
 pipeline:
   - uses: git-checkout
@@ -30,7 +37,15 @@ pipeline:
       tag: v${{package.version}}
       expected-commit: a8e7c98cb95ff97bb30a728c6b2a1ce6bff946eb
 
-  - runs: git submodule update --init --recursive
+  - runs: git submodule update --init --recursive --depth=1
+
+  - uses: patch
+    with:
+      patches: cstdint.patch
+  
+  - uses: patch
+    with:
+      patches: w-cast-function-types.patch
 
   # Build deps
   - runs: pip install -r requirements.txt
@@ -39,6 +54,12 @@ pipeline:
     runs: |
       export PYTORCH_BUILD_VERSION=${{package.version}}
       export PYTORCH_BUILD_NUMBER=0
+      # Compile with clang instead of gcc
+      export CC=clang
+      export CXX=clang++
+      export LD=lld
+      export CFLAGS="$CFLAGS -Wno-error=cast-function-type"
+      export CXXFLAGS="$CXXFLAGS -Wno-error=cast-function-type"
       python setup.py bdist_wheel
 
   - runs: |
