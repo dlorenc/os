@@ -9,18 +9,23 @@ package:
 environment:
   contents:
     packages:
+      - automake
+      - autoconf
       - build-base
       - busybox
       - ca-certificates-bundle
       - libedit-dev
       - wolfi-base
       - zlib-dev
+      - libtool
 
 pipeline:
   - uses: fetch
     with:
-      uri: https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${{package.version}}/pcre2-${{package.version}}.tar.bz2
-      expected-sha256: e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb
+      uri: "https://github.com/PCRE2Project/pcre2/archive/refs/tags/pcre2-${{package.version}}.tar.gz"
+      expected-sha256: f0048e26b02bdfaf43b8cec75030a9c2fe28552bf5caa693d3ccbf4d886fa930
+  
+  - runs: autoreconf -fiv
 
   - uses: autoconf/configure
     with:
